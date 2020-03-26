@@ -2,7 +2,7 @@ from lxml import etree
 
 def handler(xmlstr, tasks):
     
-    xmlobj = etree.fromstring(xmlstr)
+    xmlobj = etree.fromstring(bytes(xmlstr, encoding="utf-8"))
 
     datas = []
     for task in tasks:

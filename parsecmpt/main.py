@@ -8,7 +8,7 @@ from . import consts
 from . import threadpool
 from .logger import logger
 from .dealer.html import handler as htmlhandler
-# from .dealer.xml import handler as xmlhandler
+from .dealer.xml import handler as xmlhandler
 from .dealer.json import handler as jsonhandler
 
 
@@ -112,8 +112,8 @@ def main(broker_list, from_topic, to_topic, group_id, thread_count, level):
             try:
                 if content_type == consts.CT_HTML:
                     datas = htmlhandler(content, tasks)
-                # elif content_type == consts.CT_XML:
-                #     datas = xmlhandler(content, tasks)
+                elif content_type == consts.CT_XML:
+                    datas = xmlhandler(content, tasks)
                 elif content_type == consts.CT_JSON:
                     datas = jsonhandler(content, tasks)
                 else:

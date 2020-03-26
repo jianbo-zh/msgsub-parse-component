@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from parsecmpt.main import datadeal
+from parsecmpt.main import main
 
 if __name__ == "__main__":
-    datadeal()
+    main()

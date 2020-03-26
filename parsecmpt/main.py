@@ -11,6 +11,7 @@ from .dealer.html import handler as htmlhandler
 from .dealer.xml import handler as xmlhandler
 from .dealer.json import handler as jsonhandler
 
+
 @click.command()
 @click.option(
     "--broker-list",
@@ -58,7 +59,7 @@ from .dealer.json import handler as jsonhandler
     help="log level [1-5]",
     metavar="logLevel",
 )
-def datadeal(broker_list, from_topic, to_topic, group_id, thread_count, level):
+def main(broker_list, from_topic, to_topic, group_id, thread_count, level):
 
     try:
         logger.setLevel((6 - level) * 10)
@@ -78,7 +79,7 @@ def datadeal(broker_list, from_topic, to_topic, group_id, thread_count, level):
         # 消息处理逻辑
         def msg_deal(datas):
             for data in datas:
-                producer.send(to_topic, value=bytes(json.dumps(data), encoding='utf-8'))
+                producer.send(to_topic, value=bytes(json.dumps(data), encoding="utf-8"))
 
         # 事件循环
         for msg in consumer:
@@ -90,20 +91,22 @@ def datadeal(broker_list, from_topic, to_topic, group_id, thread_count, level):
             # 消息数据
             try:
                 msg_data = json.loads(msg.value)
-                
+
             except json.JSONDecodeError as e:
                 logger.warning("msg.value[%s] can not decode", msg.value)
                 continue
 
             try:
-                type_data = msg_data["content_type"] if "content_type" in msg_data else None
+                type_data = (
+                    msg_data["content_type"] if "content_type" in msg_data else None
+                )
                 content_type = helpers.get_content_type(type_data)
 
             except ValueError as e:
                 logger.warning(e)
                 continue
 
-            content = msg_data["content"] if "content" in msg_data else ''
+            content = msg_data["content"] if "content" in msg_data else ""
             tasks = msg_data["tasks"] if "tasks" in msg_data else []
 
             try:
@@ -122,9 +125,8 @@ def datadeal(broker_list, from_topic, to_topic, group_id, thread_count, level):
             else:
                 tpool.add_work(msg_deal, datas)
 
-
     except Exception as e:
         logger.error(e)
-    
+
     finally:
         tpool.close_thread_pool()

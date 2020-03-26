@@ -10,6 +10,7 @@ distlib==0.3.0
 filelock==3.0.12
 idna==2.9
 isort==4.3.21
+kafka-python==2.0.1
 lazy-object-proxy==1.4.3
 mccabe==0.6.1
 multidict==4.7.5

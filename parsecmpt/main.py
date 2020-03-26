@@ -1,17 +1,15 @@
-#!/usr/bin/env python
-
 import click
 import json
 from kafka import KafkaConsumer
 from kafka import KafkaProducer
 
-from . import helperz
-from . import constz
-from .loggerz import logger
+from . import helpers
+from . import consts
+from . import threadpool
+from .logger import logger
 from .dealer.html import handler as htmlhandler
 from .dealer.xml import handler as xmlhandler
 from .dealer.json import handler as jsonhandler
-import threadpool
 
 @click.command()
 @click.option(
@@ -61,6 +59,7 @@ import threadpool
     metavar="logLevel",
 )
 def datadeal(broker_list, from_topic, to_topic, group_id, thread_count, level):
+
     try:
         logger.setLevel((6 - level) * 10)
 
@@ -98,7 +97,7 @@ def datadeal(broker_list, from_topic, to_topic, group_id, thread_count, level):
 
             try:
                 type_data = msg_data["content_type"] if "content_type" in msg_data else None
-                content_type = helperz.get_content_type(type_data)
+                content_type = helpers.get_content_type(type_data)
 
             except ValueError as e:
                 logger.warning(e)
@@ -108,11 +107,11 @@ def datadeal(broker_list, from_topic, to_topic, group_id, thread_count, level):
             tasks = msg_data["tasks"] if "tasks" in msg_data else []
 
             try:
-                if content_type == constz.CT_HTML:
+                if content_type == consts.CT_HTML:
                     datas = htmlhandler(content, tasks)
-                elif content_type == constz.CT_XML:
+                elif content_type == consts.CT_XML:
                     datas = htmlhandler(content, tasks)
-                elif content_type == constz.CT_JSON:
+                elif content_type == consts.CT_JSON:
                     datas = htmlhandler(content, tasks)
                 else:
                     # nothing
@@ -129,8 +128,3 @@ def datadeal(broker_list, from_topic, to_topic, group_id, thread_count, level):
     
     finally:
         tpool.close_thread_pool()
-    
-
-
-if __name__ == "__main__":
-    datadeal()

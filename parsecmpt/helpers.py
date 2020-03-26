@@ -1,4 +1,4 @@
-from . import constz
+from . import consts
 
 def get_content_type(ctstr):
     '''
@@ -11,7 +11,7 @@ def get_content_type(ctstr):
 
     content_type = li[0].strip()
 
-    if content_type not in [constz.CT_HTML, constz.CT_XML, constz.CT_JSON]:
+    if content_type not in [consts.CT_HTML, consts.CT_XML, consts.CT_JSON]:
         raise ValueError('unsupport content type: [%s]' % content_type)
 
     return content_type

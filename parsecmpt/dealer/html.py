@@ -6,8 +6,9 @@ def handler(htmlstr, tasks):
     for task in tasks:
         contents = []
         items = pqobj(task)
-        for item in items:
-            contents.append(item.text)
+        if hasattr(items, '__iter__'):
+            for item in items:
+                contents.append(item.text)
 
         datas.append({
             'task' : task,

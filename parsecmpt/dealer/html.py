@@ -1,4 +1,5 @@
 from pyquery import PyQuery as pq
+from ..textanalyse import extract_tags
 
 def handler(htmlstr, tasks):
     datas = []
@@ -8,7 +9,11 @@ def handler(htmlstr, tasks):
         items = pqobj(task)
         if hasattr(items, '__iter__'):
             for item in items:
-                contents.append(item.text)
+                tags = extract_tags(item.text)
+                contents.append({
+                    "content": item.text,
+                    "tags" : tags
+                })
 
         datas.append({
             'task' : task,

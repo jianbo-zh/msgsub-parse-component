@@ -1,4 +1,5 @@
 from lxml import etree
+from ..textanalyse import extract_tags
 
 def handler(xmlstr, tasks):
     
@@ -11,7 +12,11 @@ def handler(xmlstr, tasks):
         if hasattr(items, '__iter__'):
             for item in items:
                 txt = item.text if hasattr(item, 'text') else item
-                contents.append(txt)
+                tags = extract_tags(txt)
+                contents.append({
+                    "content": txt,
+                    "tags" : tags
+                })
 
         datas.append({
             'task' : task,

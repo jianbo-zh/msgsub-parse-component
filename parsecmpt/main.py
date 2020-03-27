@@ -6,6 +6,7 @@ from kafka import KafkaProducer
 from . import helpers
 from . import consts
 from . import threadpool
+
 from .logger import logger
 from .dealer.html import handler as htmlhandler
 from .dealer.xml import handler as xmlhandler
@@ -117,8 +118,8 @@ def main(broker_list, from_topic, to_topic, group_id, thread_count, level):
                 elif content_type == consts.CT_JSON:
                     datas = jsonhandler(content, tasks)
                 else:
-                    # nothing
-                    pass
+                    pass # nothing
+                
             except Exception as e:
                 logger.error(e)
                 continue

@@ -1,5 +1,6 @@
 import json
 import jsonpath
+from ..textanalyse import extract_tags
 
 def handler(jsonstr, tasks):
     try:
@@ -13,7 +14,11 @@ def handler(jsonstr, tasks):
         items = jsonpath.jsonpath(jsonobj, task)
         if hasattr(items, '__iter__'):
             for item in items:
-                contents.append(item)
+                tags = extract_tags(item)
+                contents.append({
+                    "content": item,
+                    "tags" : tags
+                })
 
         datas.append({
             'task' : task,
